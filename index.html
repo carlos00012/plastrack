@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PlasTrack · Observatorio Satelital de Galápagos</title>
+  <meta name="description" content="Dashboard de inteligencia de negocios para el monitoreo de pasadas satelitales sobre el archipiélago de Galápagos. KPIs ambientales, mapa interactivo y análisis de tendencias." />
+  <meta name="author" content="Equipo PlasTrack · Universidad Técnica de Cotopaxi" />
+  <meta name="theme-color" content="#07131a" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="PlasTrack · Observatorio Satelital de Galápagos" />
+  <meta property="og:description" content="KPIs, mapa geoespacial y tendencias de 15 pasadas satelitales simuladas sobre Galápagos." />
+  <meta property="og:image" content="assets/img/og-cover.svg" />
+
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido principal</a>
+
+  <header class="topbar" id="top">
+    <div class="topbar__inner">
+      <a class="brand" href="#top">
+        <span class="brand__mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" role="img" aria-hidden="true">
+            <circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".35"/>
+            <ellipse cx="24" cy="24" rx="20" ry="8" fill="none" stroke="currentColor" stroke-width="1.5"
+                     transform="rotate(-28 24 24)" opacity=".65"/>
+            <circle cx="24" cy="24" r="7" fill="currentColor"/>
+            <circle cx="40" cy="15" r="3" fill="var(--accent)"/>
+          </svg>
+        </span>
+        <span class="brand__text">
+          <strong>PlasTrack</strong>
+          <small>Observatorio satelital</small>
+        </span>
+      </a>
+
+      <nav class="nav" aria-label="Navegación principal">
+        <a href="#resumen">Resumen</a>
+        <a href="#mapa">Mapa</a>
+        <a href="#tendencias">Tendencias</a>
+        <a href="#datos">Datos</a>
+      </nav>
+
+      <div class="topbar__actions">
+        <a class="btn btn--ghost" href="docs/Reporte_Tecnico_PlasTrack.pdf" target="_blank" rel="noopener" aria-label="Abrir el reporte técnico en PDF">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h8l6 6v14H6z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M14 2v6h6" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+          <span>Reporte</span>
+        </a>
+        <button class="icon-btn" id="themeToggle" type="button" aria-label="Cambiar a tema claro" title="Cambiar tema">
+          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><g stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 2v2.4M12 19.6V22M2 12h2.4M19.6 12H22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7"/></g></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1z" fill="currentColor"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ─────────────── HERO ─────────────── -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero__glow" aria-hidden="true"></div>
+      <div class="wrap hero__inner">
+        <div class="hero__copy">
+          <p class="eyebrow">
+            <span class="dot" aria-hidden="true"></span>
+            Unidad 1 · Inteligencia de Negocios
+          </p>
+          <h1 id="hero-title">Cada pasada satelital,<br /><span class="grad">una decisión mejor.</span></h1>
+          <p class="hero__lead">
+            <strong>PlasTrack</strong> convierte 15 pasadas satelitales simuladas de Copernicus sobre
+            Galápagos en indicadores accionables: nubosidad, aptitud del sensor y cobertura
+            territorial, en un solo tablero interactivo.
+          </p>
+          <div class="hero__meta">
+            <span class="pill pill--live"><span class="pulse" aria-hidden="true"></span> Dataset cargado</span>
+            <span class="pill">15 registros</span>
+            <span class="pill">9 islas</span>
+            <span class="pill">3 plataformas</span>
+          </div>
+        </div>
+
+        <aside class="hero__panel" aria-label="Ficha del conjunto de datos">
+          <h2 class="hero__panel-title">Ficha del dataset</h2>
+          <dl class="mini-facts">
+            <div><dt>Archivo</dt><dd>data_copernicus_sample.json</dd></div>
+            <div><dt>Periodo</dt><dd>Ene 12 – Jun 03, 2026</dd></div>
+            <div><dt>Fuente</dt><dd>Copernicus / USGS</dd></div>
+            <div><dt>Actualización</dt><dd id="lastUpdate">—</dd></div>
+          </dl>
+          <p class="hero__note">
+            Datos simulados con fines académicos. La arquitectura es replicable con la API
+            <em>Copernicus Data Space Ecosystem</em>.
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ─────────────── FILTROS ─────────────── -->
+    <section class="filters" aria-label="Filtros del tablero">
+      <div class="wrap filters__inner">
+        <div class="field">
+          <label for="filterIsla">Isla</label>
+          <select id="filterIsla" name="isla">
+            <option value="all">Todas las islas</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="filterSatelite">Plataforma</label>
+          <select id="filterSatelite" name="satelite">
+            <option value="all">Todas las plataformas</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="filterFrom">Desde</label>
+          <input type="date" id="filterFrom" name="desde" />
+        </div>
+        <div class="field">
+          <label for="filterTo">Hasta</label>
+          <input type="date" id="filterTo" name="hasta" />
+        </div>
+        <div class="filters__actions">
+          <button class="btn btn--primary" id="applyFilters" type="button">Aplicar</button>
+          <button class="btn btn--ghost" id="resetFilters" type="button">Limpiar</button>
+        </div>
+        <p class="filters__count" id="filterCount" role="status" aria-live="polite">15 de 15 registros</p>
+      </div>
+    </section>
+
+    <!-- ─────────────── KPIs ─────────────── -->
+    <section class="section wrap" id="resumen" aria-labelledby="kpi-title">
+      <div class="section__head">
+        <div>
+          <p class="eyebrow eyebrow--muted">Panel ejecutivo</p>
+          <h2 id="kpi-title">Indicadores clave</h2>
+        </div>
+        <p class="section__hint">Se recalculan con cada filtro aplicado.</p>
+      </div>
+
+      <div class="kpi-grid" id="kpiGrid" aria-live="polite">
+        <!-- Renderizado por JS -->
+      </div>
+
+      <div class="insight-bar">
+        <span class="insight-bar__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2v.6h5v-.6c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M9.5 19h5M10.5 21.5h3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </span>
+        <p id="headlineInsight">Calculando hallazgos…</p>
+      </div>
+    </section>
+
+    <!-- ─────────────── MAPA ─────────────── -->
+    <section class="section wrap" id="mapa" aria-labelledby="map-title">
+      <div class="section__head">
+        <div>
+          <p class="eyebrow eyebrow--muted">Capa geoespacial</p>
+          <h2 id="map-title">Pasadas satelitales y acumulación</h2>
+        </div>
+        <div class="legend" aria-label="Leyenda de aptitud del sensor">
+          <span><i class="swatch swatch--good"></i> Aptitud alta ≥ 80%</span>
+          <span><i class="swatch swatch--mid"></i> Media 60–79%</span>
+          <span><i class="swatch swatch--low"></i> Baja &lt; 60%</span>
+        </div>
+      </div>
+
+      <div class="map-layout">
+        <div class="card map-card">
+          <div id="map" class="map" role="application"
+               aria-label="Mapa interactivo de pasadas satelitales sobre Galápagos"></div>
+          <div class="map-toolbar" role="group" aria-label="Capas del mapa">
+            <button class="chip is-active" data-layer="markers" type="button" aria-pressed="true">Pasadas</button>
+            <button class="chip is-active" data-layer="heat" type="button" aria-pressed="true">Mapa de calor</button>
+            <button class="chip is-active" data-layer="zones" type="button" aria-pressed="true">Zonas de acumulación</button>
+          </div>
+        </div>
+
+        <aside class="card insight-card" aria-labelledby="insight-title">
+          <h3 id="insight-title">Lectura del analista</h3>
+          <ul class="insight-list" id="insightList"></ul>
+          <div class="insight-foot">
+            <span class="corr" id="corrBadge">r = —</span>
+            <span>Correlación nubosidad ↔ aptitud</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ─────────────── GRÁFICOS ─────────────── -->
+    <section class="section wrap" id="tendencias" aria-labelledby="charts-title">
+      <div class="section__head">
+        <div>
+          <p class="eyebrow eyebrow--muted">Analítica visual</p>
+          <h2 id="charts-title">Tendencias y comparativos</h2>
+        </div>
+        <p class="section__hint">Chart.js · datos filtrados en tiempo real.</p>
+      </div>
+
+      <div class="chart-grid">
+        <article class="card chart-card chart-card--wide">
+          <header class="chart-card__head">
+            <div>
+              <h3>Evolución de nubosidad y aptitud</h3>
+              <p>Promedio por fecha de adquisición · eje dual</p>
+            </div>
+            <span class="tag">Serie temporal</span>
+          </header>
+          <div class="chart-canvas"><canvas id="trendChart" aria-label="Gráfico de líneas de nubosidad y aptitud por fecha" role="img"></canvas></div>
+        </article>
+
+        <article class="card chart-card">
+          <header class="chart-card__head">
+            <div>
+              <h3>Mezcla de plataformas</h3>
+              <p>Participación de cada satélite</p>
+            </div>
+          </header>
+          <div class="chart-canvas chart-canvas--sm"><canvas id="platformChart" aria-label="Gráfico de dona de pasadas por satélite" role="img"></canvas></div>
+        </article>
+
+        <article class="card chart-card">
+          <header class="chart-card__head">
+            <div>
+              <h3>Aptitud promedio por isla</h3>
+              <p>Ordenada de mayor a menor</p>
+            </div>
+          </header>
+          <div class="chart-canvas"><canvas id="islandChart" aria-label="Gráfico de barras de aptitud promedio por isla" role="img"></canvas></div>
+        </article>
+
+        <article class="card chart-card">
+          <header class="chart-card__head">
+            <div>
+              <h3>Nubosidad vs. aptitud</h3>
+              <p>Dispersión de las pasadas filtradas</p>
+            </div>
+          </header>
+          <div class="chart-canvas"><canvas id="scatterChart" aria-label="Gráfico de dispersión entre nubosidad y aptitud" role="img"></canvas></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ─────────────── TABLA ─────────────── -->
+    <section class="section wrap" id="datos" aria-labelledby="table-title">
+      <div class="section__head">
+        <div>
+          <p class="eyebrow eyebrow--muted">Detalle auditable</p>
+          <h2 id="table-title">Registros de pasadas satelitales</h2>
+        </div>
+        <div class="table-tools">
+          <label class="search">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 16l4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <input type="search" id="tableSearch" placeholder="Buscar isla, zona o ID…" aria-label="Buscar registros" />
+          </label>
+          <button class="btn btn--ghost" id="exportCsv" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 19h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            CSV
+          </button>
+        </div>
+      </div>
+
+      <div class="card table-card">
+        <div class="table-scroll">
+          <table id="dataTable">
+            <caption class="sr-only">Registros de pasadas satelitales sobre Galápagos con nubosidad, aptitud, área y temperatura.</caption>
+            <thead>
+              <tr>
+                <th scope="col" data-sort="id">ID <span class="sort" aria-hidden="true">↕</span></th>
+                <th scope="col" data-sort="fecha">Fecha <span class="sort" aria-hidden="true">↕</span></th>
+                <th scope="col" data-sort="isla">Isla <span class="sort" aria-hidden="true">↕</span></th>
+                <th scope="col" data-sort="satelite">Plataforma <span class="sort" aria-hidden="true">↕</span></th>
+                <th scope="col" data-sort="nubosidad_pct" class="num">Nubosidad <span class="sort" aria-hidden="true">↕</span></th>
+                <th scope="col" data-sort="aptitud_pct" class="num">Aptitud <span class="sort" aria-hidden="true">↕</span></th>
+                <th scope="col" data-sort="ndvi_promedio" class="num col-optional">NDVI <span class="sort" aria-hidden="true">↕</span></th>
+                <th scope="col" data-sort="area_km2" class="num">Área (km²) <span class="sort" aria-hidden="true">↕</span></th>
+                <th scope="col" data-sort="temperatura_superficie_c" class="num col-optional">T° sup. <span class="sort" aria-hidden="true">↕</span></th>
+                <th scope="col">Estado</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+        <p class="table-empty" id="tableEmpty" hidden>No hay registros que coincidan con la búsqueda.</p>
+      </div>
+    </section>
+
+    <!-- ─────────────── METODOLOGÍA ─────────────── -->
+    <section class="section wrap methodology" aria-labelledby="method-title">
+      <div class="methodology__card">
+        <div>
+          <p class="eyebrow eyebrow--muted">Cómo se calcula</p>
+          <h2 id="method-title">Metodología en tres capas</h2>
+          <p>
+            El tablero sigue una arquitectura BI <strong>100% estática</strong>: el JSON se ingesta en el
+            navegador, se transforma con funciones puras y se representa con Leaflet y Chart.js.
+            Sin servidores, sin base de datos y con despliegue continuo en GitHub Pages.
+          </p>
+        </div>
+        <ol class="steps">
+          <li><span>01</span><div><strong>Ingesta</strong><p>Validación de esquema y normalización de 15 registros JSON.</p></div></li>
+          <li><span>02</span><div><strong>Transformación</strong><p>Filtros, agregaciones, correlación de Pearson y semáforo de aptitud.</p></div></li>
+          <li><span>03</span><div><strong>Visualización</strong><p>KPIs, mapa de calor, series temporales y tabla exportable.</p></div></li>
+        </ol>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <div>
+        <p class="footer__brand"><strong>PlasTrack</strong> · Observatorio Satelital de Galápagos</p>
+        <p class="footer__note">Proyecto académico de Inteligencia de Negocios · Datos simulados de Copernicus.</p>
+      </div>
+      <div class="footer__links">
+        <a href="docs/Reporte_Tecnico_PlasTrack.pdf" target="_blank" rel="noopener">Reporte técnico</a>
+        <a href="docs/Memoria_de_Construccion.pdf" target="_blank" rel="noopener">Memoria de construcción</a>
+        <a href="README.md" target="_blank" rel="noopener">README</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Librerías de visualización -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+  <script type="module" src="assets/js/app.js"></script>
+</body>
+</html>

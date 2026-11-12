@@ -1,0 +1,25 @@
+# Dependencias
+node_modules/
+package-lock.json.bak
+
+# Artefactos intermedios de la generación de documentos
+docs/_build/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+
+# Registros y temporales
+*.log
+npm-debug.log*
+.env
+.env.local
+tmp/
+temp/

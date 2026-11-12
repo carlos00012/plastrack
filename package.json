@@ -1,0 +1,20 @@
+{
+  "name": "plastrack",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Dashboard de inteligencia de negocios para el monitoreo de pasadas satelitales sobre Galápagos (Unidad 1).",
+  "keywords": ["bi", "leaflet", "chartjs", "copernicus", "galapagos", "dashboard"],
+  "license": "MIT",
+  "scripts": {
+    "serve": "node scripts/serve.mjs",
+    "test": "node --test tests/analytics.test.mjs",
+    "build:docs": "node scripts/build-docs.mjs",
+    "build:figures": "node scripts/build-figures.mjs"
+  },
+  "devDependencies": {
+    "docx": "^9.5.1",
+    "pdf-lib": "^1.17.1",
+    "puppeteer-core": "^23.11.1"
+  }
+}
